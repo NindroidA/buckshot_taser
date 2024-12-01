@@ -77,7 +77,7 @@ def install(python_path):
     if is_raspi():
         req = [
             'gpiozero==2.0',
-            'python-dotenv=1.0.0'
+            'python-dotenv==1.0.0'
         ]
     else:
         req = [
