@@ -87,7 +87,7 @@ def install(activate_script):
     if is_windows():
         cmd = f'"{activate_script}" && python -m pip install -r temp_reqs.txt'
     else:
-        cmd = f'source "{activate_script}" && python -m pip install -r temp_reqs.txt'
+        cmd = f'"{activate_script}" && python -m pip install -r temp_reqs.txt'
 
     # RUN
     print("Installing packages ...")
@@ -114,7 +114,7 @@ def main():
 
     # detect platform
     if is_raspi():
-        print("Detected platoform Raspberry Pi")
+        print("Detected platform Raspberry Pi")
     elif is_windows():
         print("Detected platform Windows")
     else:
