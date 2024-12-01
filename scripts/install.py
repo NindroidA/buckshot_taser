@@ -108,7 +108,7 @@ def main():
     print("=== BUCKSHIT TASER INSTALL SCRIPT ===")
 
     # make sure your dumbass got python
-    if sys.version.info < (3, 8):
+    if sys.version_info < (3, 8):
         print("Update yo python")
         sys.exit(1)
 
