@@ -1,0 +1,18 @@
+# python
+__pychache__/
+venv/
+env/
+build/
+lib/
+wheels/
+sdist/
+
+# environment variables
+.env
+
+# vscode shit
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
