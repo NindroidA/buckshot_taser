@@ -55,6 +55,14 @@ def setup_venv():
         print("Making venv ...")
         try:
             subprocess.check_call([sys.executable, '-m', 'venv', venv_path])
+
+            # set perms
+            if not is_windows():
+                for root, dirs, files in os.walk(venv_path):
+                    for d in dirs:
+                        os.chmod(os.path.join(root, d), 0o755)
+                    for f in files:
+                        os.chmod(os.path.join(root, f), 0o755)
         except subprocess.CalledProcessError:
             print("Failed to make dumb dumb imaginary environment")
             return False
@@ -62,7 +70,7 @@ def setup_venv():
     if is_windows():
         return os.path.join(venv_path, 'Scripts', 'python')
     else:
-        return os.path.join(venv_path, 'bin', 'activate')    
+        return os.path.join(venv_path, 'bin', 'python')    
 
 # now we install le package
 def install(python_path):
@@ -84,7 +92,7 @@ def install(python_path):
 
     # RUN
     print("Installing packages ...")
-    success = run_command([python_path, '-m', 'sudo', 'pip', 'install', '-r', 'temp_reqs.txt'])
+    success = run_command([python_path, '-m', 'pip', 'install', '-r', 'temp_reqs.txt'])
 
     # clean
     os.remove('temp_reqs.txt')
