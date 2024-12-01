@@ -20,11 +20,13 @@ def is_windows():
 # run le command
 def run_command(command):
     try:
+        if isinstance(command, str):
+            command = command.split()
+
         process = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            shell=True,
             universal_newlines=True
         )
 
@@ -58,15 +60,12 @@ def setup_venv():
             return False
         
     if is_windows():
-        activate_script = os.path.join(venv_path, 'scripts', 'activate')
+        return os.path.join(venv_path, 'Scripts', 'python')
     else:
-        activate_script = os.path.join(venv_path, 'bin', 'activate')
-
-    print("VIRTUAL ENVIRONMENT SUCCESS BITCH") 
-    return activate_script
+        return os.path.join(venv_path, 'bin', 'activate')    
 
 # now we install le package
-def install(activate_script):
+def install(python_path):
     if is_raspi():
         req = [
             'gpiozero==2.0',
@@ -83,15 +82,9 @@ def install(activate_script):
     with open('temp_reqs.txt', 'w') as f:
         f.write('\n'.join(req))
 
-    # build the script
-    if is_windows():
-        cmd = f'"{activate_script}" && python -m pip install -r temp_reqs.txt'
-    else:
-        cmd = f'"{activate_script}" && python -m pip install -r temp_reqs.txt'
-
     # RUN
     print("Installing packages ...")
-    success = run_command(cmd)
+    success = run_command([python_path, '-m', 'pip', 'install', '-r', 'temp_reqs.txt'])
 
     # clean
     os.remove('temp_reqs.txt')
