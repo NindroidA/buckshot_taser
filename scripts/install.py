@@ -84,7 +84,7 @@ def install(python_path):
 
     # RUN
     print("Installing packages ...")
-    success = run_command([python_path, '-m', 'pip', 'install', '-r', 'temp_reqs.txt'])
+    success = run_command([python_path, '-m', 'sudo', 'pip', 'install', '-r', 'temp_reqs.txt'])
 
     # clean
     os.remove('temp_reqs.txt')
