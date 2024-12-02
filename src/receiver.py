@@ -53,9 +53,9 @@ class ShotReceiver:
     def trigger_gpio(self):
         try:
             logger.debug(f"Triggering GPIO {self.gpio_pin}")
-            self.led.off()
-            time.sleep(self.trigger_duration)
             self.led.on()
+            time.sleep(self.trigger_duration)
+            self.led.off()
             logger.debug("GPIO trigger complete.")
         except Exception as e:
             logger.error(f"Error during GPIO trigger: {e}")    
@@ -82,7 +82,6 @@ class ShotReceiver:
     # main loop
     def run(self):
         self.running = True
-        self.led.on()
 
         logger.info(f"Receiver starting on port {self.port} ...")
         logger.info(f"Using GPIO pin {self.gpio_pin}")
@@ -113,16 +112,16 @@ def test_gpio():
 
     try:
         logger.info(f"Turning GPIO {gpio_pin} on for {trigger_duration} seconds")
-        led.off()
-        time.sleep(trigger_duration)
         led.on()
+        time.sleep(trigger_duration)
+        led.off()
         logger.info("GPIO test success.")
         return True
     except Exception as e:
         logger.error(f"GPIO test failed: {e}")
         return False
     finally:
-        led.on()
+        led.off()
 
 def main():
     try:
@@ -146,4 +145,4 @@ def main():
         logger.error(f"FATAL ERROR YOU BASTARD: {e}")
         raise  
 
-main()              
+main              
