@@ -35,7 +35,7 @@ class BigBrother:
         
         # socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        logger.info(f"Big Brother initalized with ROI: {self.roi}")
+        logger.info(f"Big Brother initalized.")
 
     # send shot data to raspi
     def notify_raspi(self):
