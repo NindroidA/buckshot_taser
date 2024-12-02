@@ -164,4 +164,6 @@ def main():
         detector.run()
     except Exception as e:
         logger.error(f"FATAL ERROR YOU BASTARD: {e}")
-        raise        
+        raise
+
+main()            

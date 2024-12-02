@@ -143,4 +143,6 @@ def main():
             logger.error("GPIO test failed. Please check config.")
     except Exception as e:
         logger.error(f"FATAL ERROR YOU BASTARD: {e}")
-        raise            
+        raise  
+
+main()              
