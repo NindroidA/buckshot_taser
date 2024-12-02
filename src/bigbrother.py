@@ -12,7 +12,7 @@ from pathlib import Path
 # logging setup
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -152,8 +152,9 @@ def main():
         # print instructions
         print("\nBuckshot Roulette Big Brother")
         print("===============================")
-        print("Press 'c' to toggle calibration mode")
-        print("Press 'q' to quit")
+        # these two don't work atm cause im dumb dumb but dont wanna fix it rn :3
+        #print("Press 'c' to toggle calibration mode")
+        #print("Press 'q' to quit")
         print("Press 'ctrl+c' to stop Big Brother")
 
         # run Big Brother

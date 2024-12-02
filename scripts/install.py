@@ -76,15 +76,15 @@ def setup_venv():
 def install(python_path):
     if is_raspi():
         req = [
-            'gpiozero==2.0',
-            'python-dotenv==1.0.0'
+            'gpiozero',
+            'python-dotenv'
         ]
     else:
         req = [
-            'opencv-python==4.8.1.78',
-            'numpy==1.26.2',
-            'Pillow==10.1.0',
-            'python-dotenv==1.0.0'
+            'opencv-python',
+            'numpy',
+            'Pillow',
+            'python-dotenv'
         ]           
 
     with open('temp_reqs.txt', 'w') as f:
