@@ -25,19 +25,9 @@ class BigBrother:
         self.port = int(os.getenv('PORT', '5000'))
 
         # detection settings
-        self.roi = {
-            'x1': int(os.getenv('ROI_X1', '400')),
-            'y1': int(os.getenv("ROI_Y1", '300')),
-            'x2': int(os.getenv('ROI_X2', '880')),
-            'y2': int(os.getenv('ROI_Y2', '600'))
-        }
-
-        self.red_threshold = int(os.getenv('RED_THRESH', '1000'))
+        self.black_threshold = int(os.getenv('BLACK_THRESH', '30'))
+        self.black_percentage_threshold = float(os.getenv('BLACK_PERCENT_THRESH', '0.95'))
         self.cooldown = float(os.getenv('COOLDOWN', '2.0'))
-
-        # color range for blud
-        self.lower_red = np.array([0, 120, 70])
-        self.upper_red = np.array([10, 255, 255])
 
         # states
         self.running = False
@@ -62,22 +52,19 @@ class BigBrother:
     # detect if you got shot
     def detect_shot(self, frame):
         try:
-            # display area we looking at
-            roi = frame[self.roi['y1']:self.roi['y2'],
-                        self.roi['x1']:self.roi['x2']]
-            
-            # convert to HSV
-            hsv = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
+            # convert to grayscale
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-            # mask for red
-            mask = cv2.inRange(hsv, self.lower_red, self.upper_red)
+            # count dark pixels
+            dark_pixels = np.sum(gray < self.black_threshold)
+            total_pixels = gray.size
 
-            # count red pixels
-            red_pixel_count = np.sum(mask > 0)
+            # calculate dark pixel percentage
+            dark_percentage = dark_pixels / total_pixels
+
             if self.calibration:
-                logger.debug(f"Red pixel count: {red_pixel_count}")
-
-            return red_pixel_count > self.red_threshold
+                logger.debug(f"Dark pixel percent: {dark_percentage:.2%}")
+            return dark_percentage > self.black_percentage_threshold    
         except Exception as e:
             logger.error(f"Error in shot detection: {e}")
             return False
@@ -127,11 +114,20 @@ class BigBrother:
 
                 # show monitored frame if in calibration mode
                 if self.calibration:
+                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                    dark_pixels = np.sum(gray < self.black_threshold)
+                    total_pixels = gray.size
+                    dark_percentage = dark_pixels / total_pixels
                     debug_frame = frame.copy()
-                    cv2.rectangle(debug_frame,
-                                  (self.roi['x1'], self.roi['y1'])
-                                  (self.roi['x2'], self.roi['y2']),
-                                  (0, 255, 0), 2)
+                    cv2.putText(
+                        debug_frame,
+                        f"Dark pixels: {dark_percentage:.1%}",
+                        (10, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1,
+                        (0, 255, 0),
+                        2
+                    )
                     cv2.imshow('Debug View', debug_frame)    
 
                     # check for keyboard input
@@ -142,7 +138,7 @@ class BigBrother:
                         self.toggle_calibration()
 
                 # delay to reduce CPU usage
-                time.sleep(0.3)
+                time.sleep(0.2)
         except KeyboardInterrupt:
             logger.info("\nStopping Big Brother ...")
         finally:
