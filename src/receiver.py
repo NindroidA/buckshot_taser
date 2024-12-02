@@ -145,4 +145,4 @@ def main():
         logger.error(f"FATAL ERROR YOU BASTARD: {e}")
         raise  
 
-main              
+main()              
